@@ -33,7 +33,7 @@ Private IP Addresses
 			Every device in the network has the same public IP adress
 
 	Organisation of IP Addresses in classses			Subnet Mask
-		A	10.0.0.0 - 10.255.255.255					255.0.0.0
+		A	10.0.0.0 - 10.255.255.255						255.0.0.0
 		B	172.16.0.0 - 172.31.255.255						255.255.0.0
 		C	192.168.0.0 - 192.168.255.255					255.255.255.0
 		D	-> multicast
@@ -103,5 +103,178 @@ Subnet Mask / Netmask
 				-> 2 to the power of 0's is number of Addresses we can have
 				==> 256
 
+
+		Special to the mask is, after one bit was 0 there can't be any 1 bit's anymore.
+		So the only available numbers are:
+
+			255 (binary: 11111111)
+			254 (binary: 11111110)
+			252 (binary: 11111100)
+			248 (binary: 11111000)
+			240 (binary: 11110000)
+			224 (binary: 11100000)
+			192 (binary: 11000000)
+			128 (binary: 10000000)
+			0 (binary: 00000000)
+
+		Through which 255.255.255.0 is a valid mask
+		and 255.255.128.128 is not a valid mask.
+
 Default Gateway / default router / router
 	routes outside of the network
+
+Subnetting Networks
+	Second Chart power of 2
+
+	256	128	64	32	16	8	4	2
+
+	-> in practice if you want 17 Networks
+
+		128	64	32	(16)	(8)	(4)	(2)	(1) => we need 5 bits		
+		256	128	64	[32]	16	8	4	2	=> 32 can host 17 networks
+
+	-> convert 5 host bits (0) to network bits (1)
+	-> then count network bits and add /<network bits>
+		example: 11111111.11111111.11111111.11000000 => /26
+
+	-> when creating 4 networks what are the ranges?
+		Subnet: 192.168.1.0/24
+		Subnet Mask: 255.255.255.0
+		-> find the increment
+			the last network bit
+				11111111.11111111.11111111.1[1]000000
+				-> 64
+		-> use 64 to determine the size of the networks
+			192.168.1.0 - 192.168.1.63
+			192.168.1.64 - 192.168.1.127
+			192.168.1.128 - 192.168.1.191
+			192.168.1.192 - 192.168.1.255
+			-> all networks have a subnet mask of
+				255.255.255.192 or / 26
+
+		-> how many hosts do we have?
+			6 host bits -> 2^6 => 64 - 2
+
+
+1. Calculate how many hostbits need conversion
+2. Convert or Save hostbits
+3. Find the increment
+4. Create networks
+
+Example:
+	-> 5 customers who need 20 IPs
+
+	Network: 142.2.0.0 /16
+	Subnet Mask: 255.255.0.0
+	-> 11111111.11111111.00000000.00000000
+
+	1. Calculate how many hostbits need conversion
+	128	64	32	(16)	8	4	2	1 -> 5 host bits
+	256	128	64	[32]	16	8	4	2
+
+	2. Convert Host bits
+	-> 11111111.11111111.11111111.11100000
+
+	3. Find Increment
+		11111111.11111111.11111111.11[1]00000
+	
+		1	1	[1]		0		0	0	0	0
+		128	64	[32]	16	8	4	2	1
+		=> increment is 32
+
+	4. create network
+	142.2.0.0 - 142.2.0.31
+	142.2.0.32 - 142.2.0.63
+	142.2.0.64 - 142.2.0.95
+	142.2.0.96 - 142.2.0.127
+	142.2.0.128 - 142.2.0.159
+
+	-> convert binary subnetmask into Decimal
+	11111111.11111111.11111111.11100000
+	255.255.255.224
+	/ 27
+
+
+Subnetting reverse
+	IP Address: 172.17.16.255
+	IP Address 2: 172.17.12.101
+	Router:		172.17.0.1
+	Subnet Mask: 255.255.240.0
+	/ 20
+	-> 11111111.11111111.11110000.00000000
+	->increment: 16
+	-> 172.17.0.0 - 172.17.15.255 -> IP Adress 2 and router in here
+	-> 172.17.16.0 - 172.17.31.255 -> IP Adress in here
+	-> 172.17.32.0 - 172.17.63.255
+	-> 172.17.64.0 - 172.17.79.255
+
+Example:
+	IP: Adress: 48.25.24.71 / 21
+	- network adress?
+	- broadcast adress?
+	- range
+
+	class A IP Adress so subnet Mask: 255.0.0.0
+	-> binary: 11111111.00000000.00000000.00000000
+	-> 11111111.11111111.11111000.00000000 / 21
+	-> 255.255.248.0
+	-> increment: 8
+	48.25.24.71
+
+Subnet Subnets
+	Variable Length Subnet Mask(ing)
+	-> Do the same things but start from largest subnetwork to smallest
+
+	->workers 117
+	->robots 57
+	->servers 26
+	->geusts 10
+
+	192.21.42.0 / 24
+	255.255.255.0
+	-> 11111111.11111111.11111111.00000000
+
+	[workers: 117]
+	117
+	128	64	32	16	8	4	2 -> / 25
+	-> 7
+	-> 11111111.11111111.11111111.10000000
+	-> increment 128
+	=> 192.21.42.0 - 192.21.42.127 / 25
+
+	[robots: 57]
+		57
+	128	64	32	16	8	4	2
+	-> 6
+	-> 11111111.11111111.11111111.11000000
+	-> increment 64
+	=> 192.21.42.128 - 192.21.42.191 / 26
+
+	[servers: 26]
+			26
+	128	64	32	16	8	4	2
+	-> 5
+	-> 11111111.11111111.11111111.11100000
+	-> increment 32
+	=> 192.21.42.192 - 192.21.42.223 / 27
+
+	[geusts: 10]
+				10
+	128	64	32	16	8	4	2
+	-> 6
+	-> 11111111.11111111.11111111.11110000
+
+Router:
+	-> creates local network
+	-> every devices gets its on local adress
+	-> routes trafic to the appropriate device
+	-> in netpractice two elements
+		-> destination
+			-> network adress to send the package to
+			-> mask of that network
+
+			-> don't want to specifiy destination
+				-> default or 0.0.0.0/0
+		-> next hop
+			-> adress of the next router to send the packages to
+
