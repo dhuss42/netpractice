@@ -1,0 +1,107 @@
+What is an Ip Address
+	- opens up communication between devices
+	- can connect to internet
+	- four numbers separated by three dots
+		-> numbers between 0-255
+	- each section devided by a dot is an octet
+	- Network Portion
+		-> first three octets of IP
+	- Host Portion
+		-> last octet
+
+Ping
+	ping 127.0.0.1
+
+Public IP Addresses
+	-> internet is a big network
+	-> everything on the internet needs a Public Adress that needs to be unique
+
+	Organisation of IP Addresses in classses			Subnet Mask
+		A	1.0.0.0 - 126.255.255.255					255.0.0.0
+		B	128.0.0.0 - 191.255.0.0						255.255.0.0
+		C	192.0.0.0 - 223.255.255.0					255.255.255.0
+		D	-> multicast
+		E	-> Experimental
+
+Private IP Addresses
+	-> are not unique
+	-> are a chunk out of pulic Ip Address
+	-> do not connect to the internet
+		-> NAT (Network Adress Translations)
+			assigns Router a public IP
+			Router translates private IP adress into a public one to connect to a server on the internet
+			Every device in the network has the same public IP adress
+
+	Organisation of IP Addresses in classses			Subnet Mask
+		A	10.0.0.0 - 10.255.255.255					255.0.0.0
+		B	172.16.0.0 - 172.31.255.255						255.255.0.0
+		C	192.168.0.0 - 192.168.255.255					255.255.255.0
+		D	-> multicast
+		E	-> Experimental
+
+IPV4
+	-> 192.168.1.0
+	-> ran out
+
+IPV6
+	-> internet is shifting to IPV6
+	-> 2001:db8:3333:4444:5555:6666:7777:8888
+
+IP Address in binary
+	-> 11000000.10101000.00000001.00010101
+	-> 32 bits -> 4 bytes
+	power of 2 chart
+		-> 128	64	32	16	8	4	2	1
+
+	[--Convert Binary to Decimal--]
+	-> binary:	1	1	0	0	0	0	0	0
+	-> 2 chart:	128	64	32	16	8	4	2	1
+	-----------------------------------------
+				128	64	0	0	0	0	0	0
+	-> add values: 192
+	==> final conversion: 192.168.1.21
+
+	[--Convert Decimal to Binary--]
+	- 172.16.34.3
+
+	-> Decimal: 172	44	44	12	12	4	0	0		172		44		12		4
+	-> 2 chart:	128	64	32	16	8	4	2	1		-128	-32		-8		-4
+	-----------------------------------------		-----	---		---		---
+				1	0	1	0	1	1	0	0		44		12		4		0
+	-> binary: 10101100
+	==> final conversion: 10101100.00010000.00100010.00000011
+
+Find Ip Address
+	ifconfig on Mac
+
+How does devices get IP Address
+	- every time a device connects to a router it gets an ip
+
+Subnet Mask / Netmask
+	- looks similar to ip Address
+	- hacks
+		- if first value is 255 the first three octets of the IP Adress will always stay the same
+		- if last ocetet of subnet Mask is 0 the last number of IP adress can be between 0 and 255
+			-> two IP Addresses that are always reserved
+				-> first in network: .0 is the network Adress
+				-> last in network .255 broadcast Adress
+			-> Router is also a reserved IP Adress
+
+	-> converting Subnet Mask to binary
+		-> 255. -> 11111111
+		-> 255 = 128 + 64 + 32 + 16 + 8 + 4 + 2 + 1
+
+	-> IP: 192.168.32.5
+	-> SN: 255.255.255.0
+
+	converted to binary
+	-> IP: 11000000.10101000.00100000.00000101
+	-> SN: 11111111.11111111.11111111.00000000
+		-> in SN;
+			1 = network bits
+			0 = host bits
+				-> 2 to the power of 0's is number of Addresses we can have
+				==> 256
+
+Default Gateway / default router / router
+	routes outside of the network
