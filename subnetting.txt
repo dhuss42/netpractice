@@ -80,11 +80,13 @@ How does devices get IP Address
 Subnet Mask / Netmask
 	- looks similar to ip Address
 	- hacks
-		- if first value is 255 the first three octets of the IP Adress will always stay the same
+		- if first value is 255 the same octets of the IP Adress will always stay the same
 		- if last ocetet of subnet Mask is 0 the last number of IP adress can be between 0 and 255
 			-> two IP Addresses that are always reserved
 				-> first in network: .0 is the network Adress
+					-> network adress setting all hostbits to 0
 				-> last in network .255 broadcast Adress
+					-> broadcast adress setting all hostbits to 1
 			-> Router is also a reserved IP Adress
 
 	-> converting Subnet Mask to binary
@@ -222,7 +224,7 @@ Example:
 	48.25.24.71
 
 Subnet Subnets
-	Variable Length Subnet Mask(ing)
+	Variable Length Subnet Mask(ing) (VLSM)
 	-> Do the same things but start from largest subnetwork to smallest
 
 	->workers 117
@@ -263,6 +265,8 @@ Subnet Subnets
 	128	64	32	16	8	4	2
 	-> 6
 	-> 11111111.11111111.11111111.11110000
+	-> increment 16
+	=> 192.21.42.224 - 192.21.42.39 / 28
 
 Router:
 	-> creates local network
@@ -278,3 +282,24 @@ Router:
 		-> next hop
 			-> adress of the next router to send the packages to
 
+Solutions
+
+Level 3:
+
+Because Mask is 255.255.255.128 -> last octet is 10000000
+-> increment is 128
+-> valid range is 255.255.255.1 - 255.255.255.126
+
+C
+	IP: 104.198.159.126
+	Mask: -
+
+B
+	IP: 104.198.159.124
+	Mask: 255.255.255.128
+
+A
+	IP: 104.198.159.125
+	Mask: 255.255.255.128
+
+level 4:
